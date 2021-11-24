@@ -27,7 +27,7 @@ import main.java.exceptions.MyFileNotFoundException;
 import main.java.exceptions.UnknownFormatException;
 
 public class ServerThread extends Thread {
-	private final static Logger LOGGER = LoggerFactory.getLogger(new Object() { }.getClass().getEnclosingClass());
+	private final static Logger LOGGER = LoggerFactory.getLogger(ServerThread.class);
 	private int port;
 	private ServerSocket serverSocket;
 	

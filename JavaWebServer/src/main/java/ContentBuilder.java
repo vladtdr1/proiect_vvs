@@ -9,8 +9,7 @@ public class ContentBuilder {
 		OK, BAD_REQUEST, NOT_FOUND, UNAUTHORISED
 	};
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(new Object() {
-	}.getClass().getEnclosingClass());
+	private final static Logger LOGGER = LoggerFactory.getLogger(ContentBuilder.class);
 
 	private static void logInfo(String message) {
 		if (LOGGER.isInfoEnabled())

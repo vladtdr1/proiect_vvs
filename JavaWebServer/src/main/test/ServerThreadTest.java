@@ -11,7 +11,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +25,6 @@ import main.java.ServerThread;
 import main.java.exceptions.FileAccessPermissionException;
 import main.java.exceptions.FilePermissionException;
 import main.java.exceptions.MyFileNotFoundException;
-import main.java.exceptions.UnknownFormatException;
 
 public class ServerThreadTest {
 	
@@ -46,13 +44,13 @@ public class ServerThreadTest {
 		} catch(Exception e){
 			e.printStackTrace();
 		}
-		readableSocket = new Socket();
+		readableSocket = mock(Socket.class);
 	}
 	
 	@BeforeEach
 	public void socketSetup() throws IOException {
 		//so we can read data that is sent to socket. We have no test cases that need to fake send data to socket yet.
-		readableSocket = mock(Socket.class);
+		
 		socketOutput = new ByteArrayOutputStream();
         when(readableSocket.getOutputStream()).thenReturn(socketOutput);
 	}
@@ -74,8 +72,6 @@ public class ServerThreadTest {
 	public void testSendContent(){
 		String contentToSend = testText + testText;
 		try {
-			PrintWriter outputWriter = new PrintWriter(readableSocket.getOutputStream(), true);
-			
 			serverThread.sendContent(readableSocket, contentToSend, 'h');
 			assertTrue(socketOutput.toString().contains(contentToSend));
 			//System.out.println(socketOutput.toString());
@@ -90,14 +86,17 @@ public class ServerThreadTest {
 	public void testFindFileInDirectory(){
 		Path hiddenFilePath = Paths.get(testFilePath + "hide/here/findthis.html");
 		try {
-			Files.createDirectories(hiddenFilePath.getParent());
+			Path p = hiddenFilePath.getParent();
+			if(p!=null)
+				Files.createDirectories(p);
 			if(!Files.exists(hiddenFilePath))
 				Files.createFile(hiddenFilePath);
 		
-		
-			File file = serverThread.findFileInDirectory(hiddenFilePath.getFileName().toString());
-			assertTrue(file.exists());
-			
+			Path p2 = hiddenFilePath.getFileName();
+			if(p2!=null) {
+				File file = serverThread.findFileInDirectory(p2.toString());
+				assertTrue(file.exists());
+			}
 		
 		} catch (IOException e1) {
 			fail("Could not create file.");
@@ -138,7 +137,9 @@ public class ServerThreadTest {
 		Path hiddenFilePath = Paths.get(testFilePath + "hide/here/findthis.html");
 		
 		try {
-			Files.createDirectories(hiddenFilePath.getParent());
+			Path p = hiddenFilePath.getParent();
+			if(p!=null)
+				Files.createDirectories(p);
 			if(!Files.exists(hiddenFilePath))
 				Files.createFile(hiddenFilePath);
 			
