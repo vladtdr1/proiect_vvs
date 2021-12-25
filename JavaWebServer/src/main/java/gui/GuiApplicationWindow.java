@@ -93,25 +93,15 @@ public class GuiApplicationWindow {
 		statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		frmJavaWebServer.getContentPane().add(statusLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("address");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_1.setBounds(170, 109, 50, 14);
-		frmJavaWebServer.getContentPane().add(lblNewLabel_1);
-		
 		portField = new JTextField();
-		portField.setBounds(230, 127, 50, 20);
+		portField.setBounds(258, 112, 50, 20);
 		frmJavaWebServer.getContentPane().add(portField);
 		portField.setColumns(10);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("port");
 		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_1_1.setBounds(170, 133, 50, 14);
+		lblNewLabel_1_1.setBounds(198, 115, 50, 14);
 		frmJavaWebServer.getContentPane().add(lblNewLabel_1_1);
-		
-		JLabel addressLabel = new JLabel("");
-		addressLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		addressLabel.setBounds(230, 109, 101, 14);
-		frmJavaWebServer.getContentPane().add(addressLabel);
 		
 		if (serverPathField.getText().length() == 0) {  
 		    serverPathField.setText("contentRoot/");  
