@@ -31,7 +31,9 @@ public class ServerThread extends Thread {
 	private int port;
 	private ServerSocket serverSocket;
 	
-	public String basePath = "contentRoot/";
+	public static String basePath = "contentRoot/";
+	public static String maintenancePath = "maintenance/"; 
+	public static boolean inMaintenance;
 	private final String[] defaultPaths = {"index.html", "index.htm"}; //add more if needed
 
 	public ServerThread(int port) throws IOException {
@@ -183,12 +185,12 @@ public class ServerThread extends Thread {
 
 	public File findFileInDirectory(String filename) throws FilePermissionException, MyFileNotFoundException {
 
-		if(	filename.trim().equals("/") || filename.trim().equals("") )
+		if(	filename.trim().equals("/") || filename.trim().equals("") || inMaintenance )
 		{
 			for(String defaultPath : defaultPaths)
-				if(Files.exists(Paths.get(basePath+defaultPath))) {
-					logDebug("Found default file: ", defaultPath);
-					return Paths.get(basePath+defaultPath).toFile();
+				if(Files.exists(Paths.get((inMaintenance ? maintenancePath : basePath)+defaultPath))) {
+					logDebug("Found default file: {}", defaultPath);
+					return Paths.get(((inMaintenance ? maintenancePath : basePath)+defaultPath)).toFile();
 				}
 			logError("No default file found.");
 			throw new MyFileNotFoundException();
@@ -238,5 +240,14 @@ public class ServerThread extends Thread {
 		}
 		return fileContent.toString();
 
+	}
+	
+	public void closeSocket() {
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
